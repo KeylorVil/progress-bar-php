@@ -11,19 +11,18 @@
 
 <?php
 $progress = 0;
-$errorQuantity = false;
-$errorGoal = false;
+$emptyQuantity = false;
+$emptyGoal = false;
 $overLoad = false;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $quantity = $_POST['quantity'];
     $goal = $_POST['goal'];
-    if (!empty($quantity) && !empty($goal)) {
+    $emptyQuantity = empty($quantity);
+    $emptyGoal = empty($goal);
+    if (!$emptyQuantity && !$emptyGoal) {
         $overLoad = $quantity > $goal;
         if(!$overLoad)
             $progress = round($quantity/$goal * 100);
-    } else {
-        $errorQuantity = true;
-        $errorGoal = true;
     }
 }
 ?>
@@ -35,17 +34,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="quantity">Quantity:</label>
             </div>
             <input type="number" id="quantity" name="quantity" min="0"
-                class="<?php if($errorQuantity || $overLoad) echo "error"; ?>" value="<?php echo $quantity; ?>">
+                class="<?php if($emptyQuantity || $overLoad) echo "error"; ?>" value="<?php echo $quantity; ?>">
+            <?php if($emptyQuantity) { ?>
+            <span class="errorLabel">Please enter a Quantity.</span>
+            <?php } ?>
             
             <div class="label">
                 <label for="goal">Goal:</label>
             </div>
             <input type="number" id="goal" name="goal" min="0"
-                class="<?php if($errorGoal || $overLoad) echo "error"; ?>" value="<?php echo $goal; ?>">
-            
-            <?php if($errorQuantity || $errorGoal) { ?>
-            <span class="errorLabel">Please fill out the required fields.</span>
+                class="<?php if($emptyGoal || $overLoad) echo "error"; ?>" value="<?php echo $goal; ?>">
+            <?php if($emptyGoal) { ?>
+            <span class="errorLabel">Please enter a Goal.</span>
             <?php } ?>
+
             <?php if($overLoad) { ?>
             <span class="errorLabel">Quantity can't be higher than Goal.</span>
             <?php } ?>
