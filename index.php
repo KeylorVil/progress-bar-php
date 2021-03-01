@@ -43,6 +43,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="number" id="goal" name="goal" min="0"
                 class="<?php if($errorGoal || $overLoad) echo "error"; ?>" value="<?php echo $goal; ?>">
             
+            <?php if($errorQuantity || $errorGoal) { ?>
+            <span class="errorLabel">Please fill out the required fields.</span>
+            <?php } ?>
             <?php if($overLoad) { ?>
             <span class="errorLabel">Quantity can't be higher than Goal.</span>
             <?php } ?>
